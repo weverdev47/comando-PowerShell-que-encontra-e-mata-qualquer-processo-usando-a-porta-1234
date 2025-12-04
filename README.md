@@ -1,0 +1,1 @@
+# comando-PowerShell-que-encontra-e-mata-qualquer-processo-usando-a-porta-1234
