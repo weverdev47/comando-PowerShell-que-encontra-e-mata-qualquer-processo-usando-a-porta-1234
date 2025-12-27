@@ -1,29 +1,52 @@
-#Comando-PowerShell-que-encontra-e-mata-qualquer-processo-usando-a-porta-1234
+Comando PowerShell para encontrar e matar qualquer processo usando a porta 1234 no Windows
 
+Aqui está o **comando PowerShell** para **encontrar e matar qualquer processo usando a porta 1234** no Windows:
 
-Get-Process -Id (Get-NetTCPConnection -LocalPort 1234).OwningProcess | Stop-Process -Force
+### 🔹 Comando direto (recomendado)
 
+Execute o **PowerShell como Administrador**:
 
+```powershell
+Get-NetTCPConnection -LocalPort 1234 | ForEach-Object {
+    Stop-Process -Id $_.OwningProcess -Force
+}
+```
 
+### 🔹 Alternativa (mais compatível)
 
-Como funciona:
-1.	Get-NetTCPConnection -LocalPort 1234 → procura qualquer conexão na porta 1234.
-2.	.OwningProcess → pega o PID do processo que está usando a porta.
-3.	Get-Process -Id ... | Stop-Process -Force → força o encerramento do processo.
-Como mudar a porta no LM Studio
-1.	Abra o LM Studio (mesmo com erro na porta, você consegue acessar as Configurações/Settings).
-2.	Vá em Settings → Server → Port (ou algo parecido, às vezes aparece como Local Server Port).
-3.	Mude a porta de 1234 para outra livre, por exemplo:
+Funciona mesmo em versões antigas do Windows:
 
-4321
-5678
-8765
+```powershell
+netstat -ano | findstr :1234
+```
 
+Isso vai mostrar algo como:
 
+```
+TCP    0.0.0.0:1234    0.0.0.0:0    LISTENING    5678
+```
 
-💡 Dica: Para garantir que a nova porta está livre, você pode checar no PowerShell:
+Depois mate o processo pelo **PID**:
 
-netstat -ano | findstr :4321
-•	Se não aparecer nada, a porta está livre.
-•	Depois abra o LM Studio, ele deve iniciar sem problemas.
+```powershell
+taskkill /PID 5678 /F
+```
 
+### 🔹 Tudo em uma linha (automático)
+
+```powershell
+taskkill /F /PID (netstat -ano | findstr :1234 | ForEach-Object { ($_ -split '\s+')[-1] })
+```
+
+### ⚠️ Atenção
+
+* Isso **mata qualquer processo** usando a porta 1234
+* Use com cuidado se estiver rodando servidores, Docker, Node, Python, etc.
+
+Se quiser, posso adaptar o comando para:
+
+* porta diferente
+* mostrar o **nome do processo antes de matar**
+* matar só se estiver em **LISTENING**
+
+Só falar 👍
