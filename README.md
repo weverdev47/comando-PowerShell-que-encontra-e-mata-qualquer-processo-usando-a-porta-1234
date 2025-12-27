@@ -42,11 +42,3 @@ taskkill /F /PID (netstat -ano | findstr :1234 | ForEach-Object { ($_ -split '\s
 
 * Isso **mata qualquer processo** usando a porta 1234
 * Use com cuidado se estiver rodando servidores, Docker, Node, Python, etc.
-
-Se quiser, posso adaptar o comando para:
-
-* porta diferente
-* mostrar o **nome do processo antes de matar**
-* matar só se estiver em **LISTENING**
-
-Só falar 👍
